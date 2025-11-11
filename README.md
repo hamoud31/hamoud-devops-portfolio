@@ -1,43 +1,33 @@
-# Hamoud's DevOps Portfolio 🚀
+Hamoud's DevOps Portfolio
+Welcome to my DevOps portfolio! This repository showcases hands-on projects that demonstrate my expertise in Cloud Infrastructure, CI/CD, Monitoring, Security, and Infrastructure as Code (IaC).
 
-Welcome to my DevOps portfolio!  
-This repository contains hands-on projects I've built to demonstrate my skills in DevOps, Cloud Infrastructure, CI/CD, Monitoring, and Infrastructure as Code (IaC).
+I'm passionate about automation, cloud-native technologies (AWS, Kubernetes, Terraform), and building secure, scalable systems. Each project includes documentation, architecture diagrams, and source code to guide you through the implementation.
 
-I’m passionate about automation, cloud technologies (AWS, Kubernetes, Terraform), and delivering secure, scalable infrastructure.  
-Each project includes clear documentation, diagrams, and source code to help you follow the implementation process.
+📁 Projects Overview
+#	Project Title	Focus Area	GitHub Repo
+1	CI/CD Pipeline with Jenkins & Kubernetes (EKS)	Automation, CI/CD	ci-cd-pipeline-jenkins-eks
+2	Scalable AWS Infrastructure with Terraform (IaC)	Infrastructure as Code	aws-infra-terraform-iac
+3	Kubernetes Monitoring Stack with Prometheus & Grafana	Monitoring & Observability	eks-monitoring-prometheus-grafana
+4	Secure GitOps Deployment with GitHub Actions & Argo CD	GitOps, Security	secure-gitops-eks-githubactions-argocd
 
----
+Tools & Technologies
+Cloud Platforms: AWS (EC2, EKS, S3, RDS, IAM)
 
-## 📁 Projects Overview
+Infrastructure as Code: Terraform, Ansible
 
-| Project | Description | Technologies |
-|--------|-------------|--------------|
-| [01 - CI/CD with GitOps](./01-ci-cd-gitops-pipeline) | A full CI/CD pipeline using Jenkins, GitHub, EKS, Helm, and ArgoCD | Jenkins, Terraform, Kubernetes, ArgoCD |
-| [02 - AWS Infrastructure as Code](./02-infra-as-code-aws) | Provision a scalable infrastructure on AWS using Terraform and Ansible | Terraform, AWS, Ansible |
-| [03 - Monitoring & Logging Stack](./03-monitoring-logging) | Monitoring system with Prometheus, Grafana, ELK, and alerting | Prometheus, Grafana, ELK |
-| [04 - DevSecOps Pipeline](./04-devsecops-security) | Add security to CI/CD with code analysis and image scanning | SonarQube, Trivy, Vault |
-| [05 - Microservices Migration](./05-microservices-migration) | Refactor and deploy a monolith app into microservices on Kubernetes | Docker, Istio, Helm |
+CI/CD Tools: Jenkins, GitHub Actions, GitLab CI
 
----
+Containers & Orchestration: Docker, Kubernetes, Helm
 
-## 🧰 Tools & Technologies
+Monitoring & Logging: Prometheus, Grafana, ELK Stack, Loki
 
-- **Cloud**: AWS (EC2, EKS, S3, RDS, IAM)
-- **IaC**: Terraform, Ansible
-- **CI/CD**: Jenkins, GitHub Actions, GitLab CI
-- **Containers & Orchestration**: Docker, Kubernetes, Helm
-- **Monitoring & Logging**: Prometheus, Grafana, ELK, Loki
-- **Security**: Trivy, SonarQube, HashiCorp Vault
-- **GitOps**: ArgoCD, FluxCD
+Security & DevSecOps: Trivy, SonarQube, HashiCorp Vault
 
----
+📫 Contact
+🌐 LinkedIn
 
-## 📫 Contact
+💼 Upwork Profile
 
-- [LinkedIn](www.linkedin.com/in/hamoud-blal)  
-- [Upwork](https://www.upwork.com/freelancers/~015c84e45974228b8c)  
-- 📧 Email: hamoudblal@gmail.com
+📧 Email: hamoudblal@gmail.com
+GitOps: ArgoCD, FluxCD
 
----
-
-> 💡 I'm currently open to freelance and full-time opportunities in DevOps and Cloud Engineering.
