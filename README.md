@@ -23,10 +23,10 @@ Monitoring & Logging: Prometheus, Grafana, ELK Stack, Loki
 
 Security & DevSecOps: Trivy, SonarQube, HashiCorp Vault
 
-📫 Contact
-🌐 LinkedIn
+📫 Contact 
+🌐 LinkedIn https://www.linkedin.com/in/hamoud-blal/
 
-💼 Upwork Profile
+💼 Upwork Profile https://www.upwork.com/freelancers/~015c84e45974228b8c
 
 📧 Email: hamoudblal@gmail.com
 GitOps: ArgoCD, FluxCD
