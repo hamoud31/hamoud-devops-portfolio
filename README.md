@@ -1,1 +1,0 @@
-# hamoud-devops-portfolio
