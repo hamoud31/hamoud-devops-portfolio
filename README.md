@@ -12,16 +12,12 @@ I'm passionate about automation, cloud-native technologies (AWS, Kubernetes, Ter
 
 Tools & Technologies
 Cloud Platforms: AWS (EC2, EKS, S3, RDS, IAM)
-
 Infrastructure as Code: Terraform, Ansible
-
 CI/CD Tools: Jenkins, GitHub Actions, GitLab CI
-
 Containers & Orchestration: Docker, Kubernetes, Helm
-
 Monitoring & Logging: Prometheus, Grafana, ELK Stack, Loki
-
 Security & DevSecOps: Trivy, SonarQube, HashiCorp Vault
+GitOps: ArgoCD, FluxCD
 
 📫 Contact 
 🌐 LinkedIn https://www.linkedin.com/in/hamoud-blal/
@@ -29,5 +25,5 @@ Security & DevSecOps: Trivy, SonarQube, HashiCorp Vault
 💼 Upwork Profile https://www.upwork.com/freelancers/~015c84e45974228b8c
 
 📧 Email: hamoudblal@gmail.com
-GitOps: ArgoCD, FluxCD
+
 
