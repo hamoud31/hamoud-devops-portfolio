@@ -7,6 +7,7 @@ I'm passionate about automation, cloud-native technologies (AWS, Azure, Kubernet
 #	Project Title	Focus Area	GitHub Repo
 1. aws-infra-terraform-iac
   Automating cloud infrastructure with Terraform, showcasing secure and scalable EKS deployments on AWS.
+2. ci-cd-pipeline-jenkins-eks (in progress)
 
 
 
