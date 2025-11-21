@@ -5,19 +5,10 @@ I'm passionate about automation, cloud-native technologies (AWS, Azure, Kubernet
 
 📁 Projects Overview
 #	Project Title	Focus Area	GitHub Repo
-1	CI/CD Pipeline with Jenkins & Kubernetes (EKS)	Automation, CI/CD	ci-cd-pipeline-jenkins-eks
-2	Scalable AWS Infrastructure with Terraform (IaC)	Infrastructure as Code	aws-infra-terraform-iac
-3	Kubernetes Monitoring Stack with Prometheus & Grafana	Monitoring & Observability	eks-monitoring-prometheus-grafana
-4	Secure GitOps Deployment with GitHub Actions & Argo CD	GitOps, Security	secure-gitops-eks-githubactions-argocd
+1. aws-infra-terraform-iac
+  Automating cloud infrastructure with Terraform, showcasing secure and scalable EKS deployments on AWS.
 
-Tools & Technologies
-Cloud Platforms: AWS (EC2, EKS, S3, RDS, IAM)
-Infrastructure as Code: Terraform, Ansible
-CI/CD Tools: Jenkins, GitHub Actions, GitLab CI
-Containers & Orchestration: Docker, Kubernetes, Helm
-Monitoring & Logging: Prometheus, Grafana, ELK Stack, Loki
-Security & DevSecOps: Trivy, SonarQube, HashiCorp Vault
-GitOps: ArgoCD, FluxCD
+
 
 📫 Contact 
 🌐 LinkedIn https://www.linkedin.com/in/hamoud-blal/
