@@ -52,7 +52,7 @@ variable "node_groups" {
     })
   }))
   default = {
-    mg_1 = {
+    ng_1 = {
       instance_types = ["t3.medium"]
       capacity_type  = "ON_DEMAND"
       scaling_config = {
