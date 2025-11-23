@@ -28,12 +28,14 @@ IAM roles provide the permissions needed for the EKS control plane and node grou
 
 📁 Project Structure
 
-├── main.tf           # Root module
-├── variables.tf      # Root inputs
-├── backend/          # Remote state resources (S3 + DynamoDB)
-└── modules/          # Reusable modules
-    ├── vpc/
-    └── eks/
+ main.tf           # Root module
+variables.tf      # Root inputs
+
+backend/          # Remote state resources (S3 + DynamoDB)
+
+modules/          # Reusable modules
+    vpc/
+    eks/
 
 ⚙️ Prerequisites
 
