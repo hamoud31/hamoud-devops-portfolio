@@ -1,4 +1,5 @@
 Hamoud's DevOps Portfolio
+
 Welcome to my DevOps portfolio! This repository showcases hands-on projects that demonstrate my expertise in Cloud Infrastructure, CI/CD, Monitoring, Security, and Infrastructure as Code (IaC).
 
 I'm passionate about automation, cloud-native technologies (AWS, Azure, Kubernetes, Terraform), and building secure, scalable systems. Each project includes documentation, architecture diagrams, and source code to guide you through the implementation.
