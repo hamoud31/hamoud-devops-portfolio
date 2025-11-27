@@ -37,7 +37,7 @@ variable "cluster_name" {
 variable "cluster_version" {
   description = "Kubernetes version"
   type        = string
-  default     = "1.33"
+  default     = "1.32"
 }
 
 variable "node_groups" {
@@ -52,8 +52,8 @@ variable "node_groups" {
     })
   }))
   default = {
-    manager = {
-      instance_types = ["t3.micro"]
+    ng_1 = {
+      instance_types = ["t3.medium"]
       capacity_type  = "ON_DEMAND"
       scaling_config = {
         desired_size = 2

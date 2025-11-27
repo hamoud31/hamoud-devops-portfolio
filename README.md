@@ -1,4 +1,5 @@
 Hamoud's DevOps Portfolio
+
 Welcome to my DevOps portfolio! This repository showcases hands-on projects that demonstrate my expertise in Cloud Infrastructure, CI/CD, Monitoring, Security, and Infrastructure as Code (IaC).
 
 I'm passionate about automation, cloud-native technologies (AWS, Azure, Kubernetes, Terraform), and building secure, scalable systems. Each project includes documentation, architecture diagrams, and source code to guide you through the implementation.
@@ -7,7 +8,7 @@ I'm passionate about automation, cloud-native technologies (AWS, Azure, Kubernet
 #	Project Title	Focus Area	GitHub Repo
 1. aws-infra-terraform-iac
   Automating cloud infrastructure with Terraform, showcasing secure and scalable EKS deployments on AWS.
-2. ci-cd-pipeline-jenkins-eks (in progress)
+2. ci-cd-pipeline-jenkins-sonarqube (in progress)
 
 
 
