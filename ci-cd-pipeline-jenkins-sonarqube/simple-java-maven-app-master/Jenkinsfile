@@ -1,0 +1,264 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-25'
+    }
+
+    environment {
+        PROJECT_DIR    = "ci-cd-pipeline-jenkins-sonarqube/simple-java-maven-app-master"
+        SONARQUBE_ENV  = "sonarserver"      // Jenkins SonarQube server name
+        SONAR_SCANNER  = "sonar-7.3"        // Jenkins SonarQube scanner tool name
+        APP_VERSION    = "1.0.${BUILD_NUMBER}"
+        AWS_REGION     = "eu-west-3"
+        AWS_ACCOUNT_ID = "046049643079"     // replace with your AWS account ID
+        ECR_REPO       = "simple-java-app"
+        ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/hamoud31/hamoud-devops-portfolio.git'
+                script {
+                    echo "Project directory set to: ${PROJECT_DIR}"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn -B clean install'
+                }
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn -B test'
+                }
+            }
+        }
+
+        stage('Checkstyle Analysis') {
+            steps {
+                echo 'Running Checkstyle...'
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn checkstyle:checkstyle'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                echo 'Running SonarQube analysis...'
+                dir("${PROJECT_DIR}") {
+                    withSonarQubeEnv("${SONARQUBE_ENV}") {
+                        sh '''
+                          mvn sonar:sonar \
+                            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
+                            -Dsonar.junit.reportPaths=target/surefire-reports \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    withAWS(credentials: 'aws-jenkins', region: "${AWS_REGION}") {
+                        sh """
+                          # Ensure ECR repo exists
+                          aws ecr describe-repositories --repository-names ${ECR_REPO} --region ${AWS_REGION} || \
+                          aws ecr create-repository --repository-name ${ECR_REPO} --region ${AWS_REGION}
+
+                          # Authenticate Docker to ECR
+                          aws ecr get-login-password --region ${AWS_REGION} \
+                            | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+                          # Build image with version variable
+                          docker build --build-arg APP_VERSION=${APP_VERSION} \
+                            -t ${ECR_REPO}:${APP_VERSION} .
+
+                          # Tag image for ECR
+                          docker tag ${ECR_REPO}:${APP_VERSION} ${ECR_REGISTRY}:${APP_VERSION}
+
+                          # Push image to ECR
+                          docker push ${ECR_REGISTRY}:${APP_VERSION}
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully ✔"
+        }
+        failure {
+            echo "Pipeline failed ❌"
+        }
+        always {
+            echo "Cleaning up workspace..."
+        }
+    }
+}
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-25'
+    }
+
+    environment {
+        PROJECT_DIR    = "ci-cd-pipeline-jenkins-sonarqube/simple-java-maven-app-master"
+        SONARQUBE_ENV  = "sonarserver"      // Jenkins SonarQube server name
+        SONAR_SCANNER  = "sonar-7.3"        // Jenkins SonarQube scanner tool name
+        APP_VERSION    = "1.0.${BUILD_NUMBER}"
+        AWS_REGION     = "eu-west-3"
+        AWS_ACCOUNT_ID = "046049643079"     // replace with your AWS account ID
+        ECR_REPO       = "simple-java-app"
+        ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/hamoud31/hamoud-devops-portfolio.git'
+                script {
+                    echo "Project directory set to: ${PROJECT_DIR}"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn -B clean install'
+                }
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn -B test'
+                }
+            }
+        }
+
+        stage('Checkstyle Analysis') {
+            steps {
+                echo 'Running Checkstyle...'
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn checkstyle:checkstyle'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                echo 'Running SonarQube analysis...'
+                dir("${PROJECT_DIR}") {
+                    withSonarQubeEnv("${SONARQUBE_ENV}") {
+                        sh '''
+                          mvn sonar:sonar \
+                            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
+                            -Dsonar.junit.reportPaths=target/surefire-reports \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    withAWS(credentials: 'aws-jenkins', region: "${AWS_REGION}") {
+                        sh """
+                          # Ensure ECR repo exists
+                          aws ecr describe-repositories --repository-names ${ECR_REPO} --region ${AWS_REGION} || \
+                          aws ecr create-repository --repository-name ${ECR_REPO} --region ${AWS_REGION}
+
+                          # Authenticate Docker to ECR
+                          aws ecr get-login-password --region ${AWS_REGION} \
+                            | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+                          # Build image with version variable
+                          docker build --build-arg APP_VERSION=${APP_VERSION} \
+                            -t ${ECR_REPO}:${APP_VERSION} .
+
+                          # Tag image for ECR (version + latest)
+                          docker tag ${ECR_REPO}:${APP_VERSION} ${ECR_REGISTRY}:${APP_VERSION}
+                          docker tag ${ECR_REPO}:${APP_VERSION} ${ECR_REGISTRY}:latest
+
+                          # Push both tags
+                          docker push ${ECR_REGISTRY}:${APP_VERSION}
+                          docker push ${ECR_REGISTRY}:latest
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to ECS') {
+            steps {
+                sh """
+                  aws ecs update-service \
+                    --cluster java-app-cluster \
+                    --service 
+java-app-task-service-mey0r6lw  \
+                    --task-definition java-app-task\
+                    --force-new-deployment \
+                    --region ${AWS_REGION}
+                """
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully ✔"
+        }
+        failure {
+            echo "Pipeline failed ❌"
+        }
+        always {
+            echo "Cleaning up workspace..."
+        }
+    }
+}
