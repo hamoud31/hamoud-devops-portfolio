@@ -8,6 +8,15 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
 public class App {
+    private static final String MESSAGE = "Hello World!";
+
+    public App() {}
+
+    // Méthode attendue par les tests
+    public String getMessage() {
+        return MESSAGE;
+    }
+
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/", new HelloHandler());
@@ -19,7 +28,7 @@ public class App {
     static class HelloHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            String response = "Hello World!";
+            String response = MESSAGE;
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
