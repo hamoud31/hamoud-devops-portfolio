@@ -1,25 +1,39 @@
 package com.mycompany.app;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest
-{
-    @Test
-    public void testAppConstructor() {
-        App app1 = new App();
-        App app2 = new App();
-        assertEquals(app1.getMessage(), app2.getMessage());
-    }
+public class AppTest {
 
     @Test
-    public void testAppMessage()
-    {
-        App app = new App();
-        assertEquals("Hello World!", app.getMessage());
+    public void testHttpServerResponse() throws Exception {
+        // Start the server in a background thread
+        new Thread(() -> {
+            try {
+                App.main(new String[]{});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        // Wait briefly for server to start
+        Thread.sleep(1000);
+
+        // Call the HTTP endpoint
+        URL url = new URL("http://localhost:8080/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+
+        Scanner sc = new Scanner(conn.getInputStream());
+        String response = sc.nextLine();
+        sc.close();
+
+        // Assert the response
+        assertEquals("Hello World!", response);
     }
 }
+
