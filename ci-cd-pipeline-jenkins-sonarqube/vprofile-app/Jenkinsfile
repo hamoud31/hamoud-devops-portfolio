@@ -1,1 +1,140 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-25'
+    }
+
+    environment {
+        PROJECT_DIR    = "ci-cd-pipeline-jenkins-sonarqube/vprofile-app"
+        SONARQUBE_ENV  = "sonarserver"
+        APP_VERSION    = "1.0.${BUILD_NUMBER}"
+        AWS_REGION     = "eu-west-3"
+        AWS_ACCOUNT_ID = "046049643079"
+        ECR_REPO       = "vprofile-app"
+        ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
+        CLUSTER = "faraway-crocodile-t8hwv6"
+        SERVICE = "java-app-task-service-zsy625mh"
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/hamoud31/hamoud-devops-portfolio.git'
+                script {
+                    echo "Project directory set to: ${PROJECT_DIR}"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn -B clean install'
+                }
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn -B test'
+                }
+            }
+        }
+
+        stage('Checkstyle Analysis') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    sh 'mvn checkstyle:checkstyle'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                echo 'Running SonarQube analysis...'
+                dir("${PROJECT_DIR}") {
+                    withSonarQubeEnv("${SONARQUBE_ENV}") {
+                        sh '''
+                          mvn sonar:sonar \
+                            -Dsonar.projectKey=vprofile \
+                            -Dsonar.projectName=vprofile \
+                            -Dsonar.projectVersion=${APP_VERSION} \
+                            -Dsonar.sources=src/main/java \
+                            -Dsonar.tests=src/test/java \
+                            -Dsonar.java.binaries=target/classes \
+                            -Dsonar.junit.reportPaths=target/surefire-reports \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                dir("${PROJECT_DIR}") {
+                    withAWS(credentials: 'aws-jenkins', region: "${AWS_REGION}") {
+                        sh """
+                          aws ecr describe-repositories --repository-names ${ECR_REPO} --region ${AWS_REGION} || \
+                          aws ecr create-repository --repository-name ${ECR_REPO} --region ${AWS_REGION}
+
+                          aws ecr get-login-password --region ${AWS_REGION} \
+                            | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+                          docker build -f Dockerfile -t ${ECR_REPO}:${APP_VERSION} .
+
+                          docker tag ${ECR_REPO}:${APP_VERSION} ${ECR_REGISTRY}:${APP_VERSION}
+                          docker tag ${ECR_REPO}:${APP_VERSION} ${ECR_REGISTRY}:latest
+
+                          docker push ${ECR_REGISTRY}:${APP_VERSION}
+                          docker push ${ECR_REGISTRY}:latest
+                        """
+                    }
+                }
+            }
+        }
+        stage('Deploy to ECS') {
+            steps {
+                withAWS(credentials: 'aws-jenkins', region: "${AWS_REGION}") {
+                    sh """
+                      aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} \
+                        --force-new-deployment
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully ✔"
+        }
+        unstable {
+            echo "Pipeline marked unstable ⚠ (e.g., test failures but build succeeded)"
+        }
+        failure {
+            echo "Pipeline failed ❌"
+        }
+        always {
+            cleanWs()
+        }
+    }
+}
 
