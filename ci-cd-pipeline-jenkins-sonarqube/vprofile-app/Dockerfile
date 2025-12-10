@@ -1,27 +1,30 @@
-# Use official Maven image to build the app
+# Stage 1: Build the WAR with Maven
 FROM maven:3.9.9-eclipse-temurin-21 AS build
-
-# Set working directory
 WORKDIR /app
 
 # Copy project files
 COPY pom.xml .
 COPY src ./src
 
-# Package the application (creates a JAR file)
+# Package the application (creates WAR in /app/target)
 RUN mvn clean package -DskipTests
 
-# Use a lightweight JDK image to run the app
-FROM eclipse-temurin:21-jdk
+# Stage 2: Run the WAR in Tomcat
+FROM tomcat:10-jdk21
+LABEL "Project"="Vprofile"
+LABEL "Author"="Hamoud"
 
-# Set working directory
-WORKDIR /app
+# Clean default Tomcat webapps
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy built JAR from the build stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy built WAR from the build stage into Tomcat webapps as ROOT.war
+COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
-# Expose port (adjust if your app uses another port)
+# Expose Tomcat port
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Set working directory
+WORKDIR /usr/local/tomcat/
+
+# Start Tomcat
+CMD ["catalina.sh", "run"]
