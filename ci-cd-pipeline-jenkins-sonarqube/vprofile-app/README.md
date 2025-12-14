@@ -52,6 +52,3 @@ Jenkinsfile
 ├── src/
 └── docs/
     └── images/
-
-SonarQube analyzes the code.
-
