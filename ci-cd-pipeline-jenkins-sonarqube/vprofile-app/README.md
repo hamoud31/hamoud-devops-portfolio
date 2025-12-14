@@ -112,7 +112,7 @@ CI/CD pipeline is fully reproducible
 ├── src/                 # Java application source code
 ├── architecture/        # Architecture diagrams
 ├── docs/
-│   └── images/          # Screenshots and diagrams
+│   └── images/          # Screenshots
 
 📸 Pipeline Evidence
 Screenshots demonstrating the pipeline execution and deployment
