@@ -14,8 +14,8 @@ pipeline {
         AWS_ACCOUNT_ID = "046049643079"
         ECR_REPO       = "vprofile-app"
         ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
-        CLUSTER = "faraway-crocodile-t8hwv6"
-        SERVICE = "java-app-task-service-zsy625mh"
+        CLUSTER = "DevOpsECSCluster"
+        SERVICE = "AppDeployService"
     }
 
     options {
@@ -137,4 +137,3 @@ pipeline {
         }
     }
 }
-
