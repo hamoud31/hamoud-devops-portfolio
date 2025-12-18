@@ -8,7 +8,16 @@ I'm passionate about automation, cloud-native technologies (AWS, Azure, Kubernet
 #	Project Title	Focus Area	GitHub Repo
 1. aws-infra-terraform-iac
   Automating cloud infrastructure with Terraform, showcasing secure and scalable EKS deployments on AWS.
-2. ci-cd-pipeline-jenkins-sonarqube (in progress)
+2. CI/CD Pipeline with Jenkins & SonarQube
+**Goal:** Automate build, test, and quality analysis for a Java application
+
+**Tools:** Jenkins, SonarQube, Docker, GitHub, AWS
+
+**What this shows:**
+- CI/CD pipeline design
+- Automated code quality checks
+- Jenkins pipeline scripting
+- DevOps best practices
 
 
 
